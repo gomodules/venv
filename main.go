@@ -17,8 +17,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Load environment variables from .env file
-	err := godotenv.Load()
+	fileNames := []string{".env"}
+	if len(os.Args) > 2 && strings.HasPrefix(os.Args[1], "--env-files=") {
+		envFiles := strings.TrimPrefix(os.Args[1], "--env-files=")
+		fileNames = strings.Split(envFiles, ",")
+		os.Args = append(os.Args[:1], os.Args[2:]...)
+	}
+	err := godotenv.Load(fileNames...)
 	if err != nil {
 		fmt.Println("Warning: Could not load .env file:", err)
 	}

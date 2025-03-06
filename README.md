@@ -1,3 +1,3 @@
 # venv
 
-`go run main.go echo "Hello $API_KEY"`
+`go run main.go --env-files=x.txt,y.txt echo "Hello $API_KEY"`
