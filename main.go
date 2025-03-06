@@ -31,7 +31,18 @@ func main() {
 	cmd := exec.Command("sh", "-c", command)
 
 	// Pass through the environment variables
-	cmd.Env = os.Environ()
+	before := os.Environ()
+	after := before[:0]
+	for _, env := range before {
+		if k, v, found := strings.Cut(env, "="); found && strings.HasPrefix(v, "vs://") {
+			if data, err := os.ReadFile(strings.TrimPrefix(v, "vs://")); err == nil {
+				after = append(after, fmt.Sprintf("%s=%s", k, string(data)))
+			}
+		} else {
+			after = append(after, env)
+		}
+	}
+	cmd.Env = after
 
 	// Set up stdout and stderr to print to console
 	cmd.Stdout = os.Stdout
