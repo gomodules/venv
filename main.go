@@ -5,8 +5,6 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-
-	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -15,12 +13,6 @@ func main() {
 		fmt.Println("Usage: go run main.go <command> [args...]")
 		fmt.Println("Example: go run main.go echo \"Hello $USER\"")
 		os.Exit(1)
-	}
-
-	// Load environment variables from .env file
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println("Warning: Could not load .env file:", err)
 	}
 
 	// Join all arguments into a single command string
@@ -49,7 +41,7 @@ func main() {
 	cmd.Stderr = os.Stderr
 
 	// Run the command
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error executing command: %v\n", err)
 		os.Exit(1)
