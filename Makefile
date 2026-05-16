@@ -31,7 +31,7 @@ SRC_REG  ?=
 
 # This version-strategy uses git tags to set the version string
 git_branch       := $(shell git rev-parse --abbrev-ref HEAD)
-git_tag          := $(shell git describe --exact-match --abbrev=0 2>/dev/null || echo "")
+git_tag          := $(shell git describe --tags --exact-match --abbrev=0 2>/dev/null || echo "")
 commit_hash      := $(shell git rev-parse --verify HEAD)
 commit_timestamp := $(shell date --date="@$$(git show -s --format=%ct)" --utc +%FT%T)
 
@@ -293,7 +293,7 @@ lint: $(BUILD_DIRS)
 	    --env HTTPS_PROXY=$(HTTPS_PROXY)                        \
 	    --env GOFLAGS="-mod=vendor"                             \
 	    $(BUILD_IMAGE)                                          \
-	    golangci-lint run --enable $(ADDTL_LINTERS) --max-same-issues=100 --timeout=10m --exclude-files="generated.*\.go$\" --exclude-dirs-use-default --exclude-dirs=client,vendor
+	    golangci-lint run --enable $(ADDTL_LINTERS) --max-same-issues=100 --timeout=10m --skip-files="generated.*\.go$\" --exclude-dirs=client,vendor
 
 $(BUILD_DIRS):
 	@mkdir -p $@
